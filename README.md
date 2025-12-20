@@ -4,6 +4,8 @@
     <img src="gol_images/entry.gif">
 </p>
 
+Thanks to [dinesh-gdk](dinesh-gdk.github.io) for the original code.W
+
 The Game of Life, also known simply as Life, is a cellular automaton devised by the British mathematician John Horton Conway in 1970.
 
 You can access my web application of Conway's game of life [here](https://dinesh-gdk.github.io/Game-Of-Life/). 

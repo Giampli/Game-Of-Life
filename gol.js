@@ -1,9 +1,13 @@
-const cellDim = 20;
+const cellDim = 10;
 const minRow = 25;
 const minCol = 38;
 
-let rows = Math.floor(window.innerHeight/cellDim) - 5;
-let cols = Math.floor(window.innerWidth/cellDim) - 2;
+let rows = Math.floor(window.innerHeight/(cellDim+3));
+let cols = Math.floor(window.innerWidth/(cellDim+3));
+
+console.log(window.innerHeight);
+console.log(window.innerWidth);
+
 let popCount = 0;
 
 rows = rows > minRow ? rows : minRow;
@@ -12,8 +16,8 @@ cols = cols > minCol ? cols : minCol;
 let grid = [...Array(rows)].map(e => Array(cols).fill(0));
 let nxtGrid = [...Array(rows)].map(e => Array(cols).fill(0));
 
-const live_color = 'white';
-const dead_color = 'black';
+const live_color = '#1773e2';
+const dead_color = '#4d4d4d';
 
 // options
 const next = document.getElementById('next');
@@ -22,7 +26,6 @@ const pause = document.getElementById('pause');
 const clear = document.getElementById('clear');
 const pattern = document.getElementById('pattern');
 const pace = document.getElementById('pace');
-const popDisp = document.getElementById('popCount');
 
 const board = document.getElementById('board');
 createBoard();
@@ -34,6 +37,8 @@ pause.disabled = true;
 next.onclick = () => nextGen();
 clear.onclick = () => clearBoard();
 
+chargePattern("gun");
+
 let timer;    
 play.onclick = () => {
     next.disabled = true;
@@ -41,7 +46,7 @@ play.onclick = () => {
     pause.disabled = false;
     clear.disabled = true;
     pattern.disabled = true;
-    
+    console.log(pace.value);
     timer = setInterval(() => nextGen(1),
         (Number(pace.max) - Number(pace.value) + Number(pace.min))); 
 } 
@@ -56,13 +61,15 @@ pause.onclick = () => {
     clearInterval(timer);
 }
 
-pattern.onchange = () => {
+pattern.onchange = () => chargePattern(pattern.value);
+
+
+function chargePattern(s) {
     clearBoard();
-    let shift = 1;
-    if(pattern.value === 'gun')     shift = 0;
-    const fig = eval(pattern.value);
+    let shift = .25;
+    const fig = eval(s);
     for(let i=0; i<fig.length; ++i) {
-        toggle(fig[i][0] + shift * Math.floor(rows/2), fig[i][1] + Math.floor(cols/2));
+        toggle(fig[i][0] + Math.floor(shift * Math.floor(rows/2)), fig[i][1] + Math.floor(cols/2));
     }
 }
 
@@ -88,6 +95,13 @@ function createBoard() {
         cell.onmousedown  = () => toggle(i, j);
         cell.onmouseenter = (ev) => { if(ev.buttons == 1)  toggle(i, j); }
 
+        const divCell = document.createElement('div');
+        divCell.className = 'circle';
+        divCell.style.height = String(cellDim) + 'px';
+        divCell.style.width = String(cellDim) + 'px';
+
+        cell.appendChild(divCell);
+
         return cell;
     }
 }
@@ -96,17 +110,16 @@ function toggle(i, j) {
 
     if(grid[i][j] === 0) {
         grid[i][j] = 1;
-        getCell(i, j).style.backgroundColor = live_color;
+        getCell(i, j).firstChild.style.backgroundColor = live_color;
         popCount++;
     } else {
         grid[i][j] = 0;
-        getCell(i, j).style.backgroundColor = dead_color;
+        getCell(i, j).firstChild.style.backgroundColor = dead_color;
         popCount--;
     }
 
     next.disabled = false;
     play.disabled = false;
-    popDisp.innerHTML = popCount;
 }
 
 function nextGen(repeat=0) {
@@ -143,15 +156,14 @@ function nextGen(repeat=0) {
     for(let i=0; i<rows; ++i) {
         for(let j=0; j<cols; j++) {
             if(nxtGrid[i][j] === 1) {
-                getCell(i, j).style.backgroundColor = live_color;
+                getCell(i, j).firstChild.style.backgroundColor = live_color;
                 popCount++;
             } else {
-                getCell(i, j).style.backgroundColor = dead_color;
+                getCell(i, j).firstChild.style.backgroundColor = dead_color;
             }
         }
     }
 
-    popDisp.innerHTML = popCount;
 
     grid = nxtGrid;
     nxtGrid = [...Array(rows)].map(e => Array(cols).fill(0));
@@ -170,7 +182,7 @@ function clearBoard() {
     for(let i=0; i<rows; ++i) {
         for(let j=0; j<cols; j++) {
             grid[i][j] = 0;
-            getCell(i, j).style.backgroundColor = dead_color;
+            getCell(i, j).firstChild.style.backgroundColor = dead_color;
         }
     }
 
@@ -179,7 +191,6 @@ function clearBoard() {
     next.disabled = true;
     play.disabled = true;
     pause.disabled = true;
-    popDisp.innerHTML = 0;
 }
 
 function getCell(i, j) {
@@ -206,4 +217,4 @@ function changePage(direction) {
     }
 }
 
-document.getElementById('info').click();
+// document.getElementById('info').click();
