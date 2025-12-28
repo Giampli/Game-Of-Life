@@ -5,7 +5,7 @@
   --bg-hover: #3e4952;
   --accent: #88acce;
   --cell-live: #1773e2;
-  --cell-dead: #4d4d4d;
+  --cell-dead: #000;
   --modal-chrome: #cdcddd;
 }
 
