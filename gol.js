@@ -17,7 +17,7 @@ let grid = [...Array(rows)].map(e => Array(cols).fill(0));
 let nxtGrid = [...Array(rows)].map(e => Array(cols).fill(0));
 
 const live_color = '#1773e2';
-const dead_color = '#4d4d4d';
+const dead_color = '#000';
 
 // options
 const next = document.getElementById('next');
@@ -197,15 +197,15 @@ function getCell(i, j) {
     return document.getElementById(String(i) + ' ' + String(j));
 }
 
-
+play.click();
 // tutorial
-const tutorial = document.getElementById('tutorial').querySelectorAll('div');
+// const tutorial = document.getElementById('tutorial').querySelectorAll('div');
 let page_no = 1;
 
-info.onclick = () => changePage(0);
-document.getElementById('nxt').onclick = () => changePage(1);
-document.getElementById('pre').onclick = () => changePage(-1);
-document.getElementsByClassName('close')[0].onclick = () => { page_no = 1; }
+// info.onclick = () => changePage(0);
+// document.getElementById('nxt').onclick = () => changePage(1);
+// document.getElementById('pre').onclick = () => changePage(-1);
+// document.getElementsByClassName('close')[0].onclick = () => { page_no = 1; }
 
 function changePage(direction) {
 
